@@ -1,4 +1,4 @@
-/// Sort an array into ascending order.
+/// Sort an array into ascending order using Bubble sort.
 pub fn sort<T: PartialOrd>(arr: &mut [T]) {
     let mut n = arr.len();
     if n == 0 {
