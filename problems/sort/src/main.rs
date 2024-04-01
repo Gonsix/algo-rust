@@ -1,4 +1,5 @@
 use sort::bubble_sort;
+use sort::gen_random_vec_f64;
 use sort::insertion_sort;
 use sort::merge_sort;
 // use sort::bubble_sort;
@@ -8,9 +9,8 @@ use sort::utils::check_sorted;
 use sort::utils::{gen_random_usize, gen_random_vec_i32};
 
 #[allow(unused_imports)]
+#[allow(unused_variables)]
 fn main() {
-    let mut vec1 = vec![5, 3, 1, 90, 0];
-
     // println!("{:?}", vec1);
 
     // insertion_sort::sort(&mut vec1);
@@ -24,17 +24,14 @@ fn main() {
     // merge_sort::sort();
     // quick_sort::sort();
 
-    let n = gen_random_usize(10_usize.pow(4));
-    println!("Generated: {}", n);
-
+    let n = gen_random_usize(10_usize.pow(5));
     let mut rand_vec = gen_random_vec_i32(n, 10_i32.pow(6));
+    merge_sort::sort(& mut rand_vec);
+    println!("Int array: {}", check_sorted(&rand_vec));
 
-    println!("sample element: {:?}", rand_vec[5]);
+    // Sort a float vector
+    let mut rand_vec_float = gen_random_vec_f64(n, 300.0);
+    merge_sort::sort(&mut rand_vec_float);
+    println!("Float array: {}", check_sorted(&rand_vec_float));
 
-    bubble_sort::sort(& mut rand_vec);
-    // println!("{:?}", rand_vec);
-
-    println!("{}", check_sorted(&rand_vec));
-
-    // これでソートのテストができる！
 }
