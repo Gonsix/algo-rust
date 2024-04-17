@@ -26,12 +26,12 @@ fn main() {
 
     let n = gen_random_usize(10_usize.pow(5));
     let mut rand_vec = gen_random_vec_i32(n, 10_i32.pow(6));
-    merge_sort::sort(& mut rand_vec);
+    quick_sort::sort(& mut rand_vec);
     println!("Int array: {}", check_sorted(&rand_vec));
 
     // Sort a float vector
     let mut rand_vec_float = gen_random_vec_f64(n, 300.0);
-    merge_sort::sort(&mut rand_vec_float);
+    quick_sort::sort(&mut rand_vec_float);
     println!("Float array: {}", check_sorted(&rand_vec_float));
 
 }
