@@ -10,17 +10,28 @@ fn main() {
         heap.push(vec1[i]);
     }
 
+    println!("Before Sort:");
     heap.print();
 
-    match heap.pop() {
-        Some(x) => {
-            println!("PoP! {} ", x);
-        }
-        None => {
+    println!("Size: {}", heap.size());
 
-        }
-    }
+    let sorted_vec = heap.into_sorted_vec();
 
-    heap.print();
+
+    println!("After Sorted: {:#?}", sorted_vec);
+
+    // match heap.pop() {
+    //     Some(x) => {
+    //         println!("PoP! {} ", x);
+    //     }
+    //     None => {
+
+    //     }
+    // }
+
+    // heap.print();
+
+    // println!("Size: {}", heap.size());
+    println!("Empty: {}", heap.is_empty());
 
 }

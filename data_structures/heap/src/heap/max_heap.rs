@@ -1,9 +1,7 @@
-use std::fmt::Debug;
+use std::{clone, fmt::Debug};
 
 use num_traits::Bounded;
 
-// TODO: インデックスを取得するこれらの関数も、ヒープのインスタンスメソッドにすると
-// 0 <= i <= n のチェックを行い、Option<usize> で返すような関数にできる
 fn parent(i: usize) -> Option<usize>  {
     if i > 0 {
         return Some(i/2);
@@ -35,21 +33,26 @@ where
 {
 
     pub fn downheap(&mut self, i: usize) {
-        let heap_size = self.data.len() - 1; // ０番目の要素はカウントしない
+        let heap_size = self.size(); // ０番目の要素はカウントしない
+        self.downheap_in_size(i, heap_size);
+    }
+
+    // 対象区間を選択できる Down heap
+    fn downheap_in_size(&mut self, i: usize, size: usize) {
         let l = left(i);
         let r = right(i);
         let mut largest: usize = i;
 
-        if l <= heap_size && self.data[l] > self.data[i] {
+        if l <= size && self.data[l] > self.data[i] {
             largest = l;
         }
-        if r <= heap_size && self.data[r] > self.data[largest] {
+        if r <= size && self.data[r] > self.data[largest] {
             largest = r;            
         }
 
         if largest != i  {
             self.data.swap(i, largest);
-            self.downheap(largest);
+            self.downheap_in_size(largest, size);
         }
     }
 
@@ -119,33 +122,55 @@ where
     }
 
     pub fn peek_mut(&mut self) -> Option<&mut T> {
-        // TODO: Implement this method
-        return Some(&mut self.data[0]);
+        if self.data.len() > 1 {
+            return Some(&mut self.data[1]);
+        }
+        else {
+            return None;
+        }    
     }
 
     /// Consumes the BinaryHeap and returns a vector in sorted (ascending) order.
-    /// ヒープソート
+    /// ヒープソートを利用
     pub fn into_sorted_vec(&mut self) -> Vec<T> {
-        // TODO: Implement this method
-        return Vec::new();
+
+        self.heap_sort();
+
+        // インデックス０の要素を除いたベクターを新たに作成
+        let sorted_vec = self.data[1..self.data.len()].to_vec();
+        return sorted_vec;
+        
     }
 
-    pub fn len(&self) -> usize {
-        // TODO: Implement this method  
-        return 0;
+    /// ヒープソートを行う
+    pub fn heap_sort(&mut self) {
+        let mut i: usize = self.size();
+        while i >= 2 {
+            // ルートと末端の要素を入れ替える
+            self.data.swap(1, i);
+            i -= 1;
+            self.downheap_in_size(1, i);
+        }
     }
+
     //    ####  Utilities  ####
     
     
     pub fn print(&self) {
-        for i in 0..self.data.len() {
+        for i in 1..self.data.len() {
             println!("[{}]-> {:?}", i, self.data[i]);
         }
     }
 
-    pub fn is_empty(&self) {
-        // TODO: Implement this method
+    pub fn is_empty(&self) -> bool {
+        match self.data.len() {
+            1 => true,
+            _ => false
+        }
+    }
 
+    pub fn size(&self) -> usize {
+        return self.data.len() -1;
     }
 
 
