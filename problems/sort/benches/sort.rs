@@ -1,5 +1,5 @@
 use divan::{Bencher, AllocProfiler};
-use sort::{merge_sort, insertion_sort};
+use sort::{merge_sort, insertion_sort, quick_sort};
 
 const SIZES: &[usize] =
     &[1, 2, 8, 16, 64, 512, 4 * 1024, 16 * 1024];
@@ -44,6 +44,16 @@ mod random {
             merge_sort::sort(v);
         });
     }
+
+    #[divan::bench(args = SIZES)]
+    fn quick_sort_bench(bencher: Bencher, n: usize) {
+        // `rand_int_vec_generator` を使用しています。
+        bencher.with_inputs(gen::rand_int_vec_generator(n)).bench_local_refs(|v| {
+            quick_sort::sort(v);
+        });
+    }
+
+
 }
 
 mod sorted {
@@ -60,6 +70,14 @@ mod sorted {
     fn merge_sort_bench(bencher: Bencher, n: usize) {
         bencher.with_inputs(gen::sorted_int_vec_generator(n)).bench_local_refs(|v| {
             merge_sort::sort(v);
+        });
+    }
+
+    #[divan::bench(args = SIZES)]
+    fn quick_sort_bench(bencher: Bencher, n: usize) {
+        // `rand_int_vec_generator` を使用しています。
+        bencher.with_inputs(gen::sorted_int_vec_generator(n)).bench_local_refs(|v| {
+            quick_sort::sort(v);
         });
     }
 }
